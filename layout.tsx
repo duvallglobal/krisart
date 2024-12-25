@@ -1,28 +1,51 @@
-import './globals.css'
-import { Montserrat } from 'next/font/google'
-import Header from './components/Header'
-import Footer from './components/Footer'
+'use client'
 
-const montserrat = Montserrat({ subsets: ['latin'] })
+import { ReactNode } from 'react'
+import { useRouter, usePathname } from 'next/navigation'
+import { useAuth } from '../contexts/AuthContext'
+import AdminSidebar from './components/AdminSidebar'
+import AdminHeader from './components/AdminHeader'
+import { AuthProvider } from '../contexts/AuthContext'
 
-export const metadata = {
-  title: 'Dauntless Arts | Avant-Garde Art Gallery',
-  description: 'Experience the bold and visionary artwork of Dauntless Arts',
+function AdminLayoutContent({ children }: { children: ReactNode }) {
+  const { isAuthenticated, isLoading } = useAuth()
+  const router = useRouter()
+  const pathname = usePathname()
+
+  // Don't check auth for login page
+  if (pathname === '/admin/login') {
+    return <>{children}</>
+  }
+
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
+
+  if (!isAuthenticated) {
+    router.push('/admin/login')
+    return null
+  }
+
+  return (
+    <div className="flex h-screen bg-gray-100">
+      <AdminSidebar />
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <AdminHeader />
+        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-200">
+          <div className="container mx-auto px-6 py-8">
+            {children}
+          </div>
+        </main>
+      </div>
+    </div>
+  )
 }
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function AdminLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
-      <body className={`${montserrat.className} bg-black text-white`}>
-        <Header />
-        <main>{children}</main>
-        <Footer />
-      </body>
-    </html>
+    <AuthProvider>
+      <AdminLayoutContent>{children}</AdminLayoutContent>
+    </AuthProvider>
   )
 }
 

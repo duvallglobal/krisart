@@ -1,54 +1,48 @@
 'use client'
 
-import Image from 'next/image'
-import { motion } from 'framer-motion'
+import { useState } from 'react'
+import { Plus } from 'lucide-react'
 
-export default function About() {
+export default function AdminUsers() {
+  const [users, setUsers] = useState([
+    { id: 1, name: 'Admin User', email: 'admin@example.com', role: 'Admin' },
+    { id: 2, name: 'Editor User', email: 'editor@example.com', role: 'Editor' },
+    { id: 3, name: 'Viewer User', email: 'viewer@example.com', role: 'Viewer' },
+  ])
+
   return (
-    <div className="container mx-auto px-4 py-24">
-      <motion.h1 
-        initial={{ opacity: 0, y: -50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        className="text-5xl font-bold mb-12 text-center font-serif"
-      >
-        About the Artist
-      </motion.h1>
-      <div className="flex flex-col md:flex-row items-center md:items-start gap-12">
-        <motion.div
-          initial={{ opacity: 0, x: -50 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="md:w-1/2"
-        >
-          <Image
-            src="/artist-portrait.jpg"
-            alt="Artist Portrait"
-            width={600}
-            height={800}
-            className="rounded-lg shadow-lg"
-          />
-        </motion.div>
-        <motion.div
-          initial={{ opacity: 0, x: 50 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="md:w-1/2"
-        >
-          <h2 className="text-3xl font-semibold mb-6 font-serif">Jane Doe</h2>
-          <p className="text-lg text-gray-300 mb-6">
-            Jane Doe is a contemporary artist known for her vibrant and expressive paintings. With over 15 years of experience, Jane has developed a unique style that combines elements of abstract expressionism with realistic details.
-          </p>
-          <p className="text-lg text-gray-300 mb-6">
-            Born and raised in New York City, Jane drew inspiration from the bustling urban environment and the diverse cultures surrounding her. She studied Fine Arts at the prestigious Art Institute of Chicago, where she honed her skills and developed her artistic voice.
-          </p>
-          <p className="text-lg text-gray-300 mb-6">
-            Jane's work has been exhibited in galleries across the United States and Europe. Her paintings are characterized by bold color choices, dynamic compositions, and a deep emotional resonance that speaks to viewers on a personal level.
-          </p>
-          <p className="text-lg text-gray-300">
-            Through Dauntless Arts, Jane aims to share her passion for creativity and inspire others to embrace the transformative power of art in their lives.
-          </p>
-        </motion.div>
+    <div>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-semibold">Users</h1>
+        <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md flex items-center">
+          <Plus className="w-5 h-5 mr-2" />
+          Add User
+        </button>
+      </div>
+      <div className="bg-white shadow-md rounded-lg overflow-hidden">
+        <table className="min-w-full divide-y divide-gray-200">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+            </tr>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200">
+            {users.map((user) => (
+              <tr key={user.id}>
+                <td className="px-6 py-4 whitespace-nowrap">{user.name}</td>
+                <td className="px-6 py-4 whitespace-nowrap">{user.email}</td>
+                <td className="px-6 py-4 whitespace-nowrap">{user.role}</td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <button className="text-blue-600 hover:text-blue-900 mr-2">Edit</button>
+                  <button className="text-red-600 hover:text-red-900">Delete</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   )
